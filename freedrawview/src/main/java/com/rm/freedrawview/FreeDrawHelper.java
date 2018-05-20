@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -36,11 +38,11 @@ public class FreeDrawHelper {
      * Create, initialize and setup a paint
      */
     static Paint createPaintAndInitialize(int paintColor, int paintAlpha,
-                                          float paintWidth, boolean fill) {
+                                          float paintWidth, boolean fill, boolean isEraseMode) {
 
         Paint paint = createPaint();
 
-        initializePaint(paint, paintColor, paintAlpha, paintWidth, fill);
+        initializePaint(paint, paintColor, paintAlpha, paintWidth, fill, isEraseMode);
 
         return paint;
     }
@@ -50,7 +52,7 @@ public class FreeDrawHelper {
     }
 
     static void initializePaint(Paint paint, int paintColor, int paintAlpha, float paintWidth,
-                                boolean fill) {
+                                boolean fill, boolean isEraseMode) {
 
         if (fill) {
             setupFillPaint(paint);
@@ -61,6 +63,7 @@ public class FreeDrawHelper {
         paint.setStrokeWidth(paintWidth);
         paint.setColor(paintColor);
         paint.setAlpha(paintAlpha);
+        paint.setXfermode((isEraseMode) ? new PorterDuffXfermode(PorterDuff.Mode.CLEAR): null);
     }
 
     static void setupFillPaint(Paint paint) {

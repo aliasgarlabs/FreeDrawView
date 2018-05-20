@@ -26,10 +26,12 @@ class HistoryPath implements Parcelable, Serializable {
     private float originX, originY;
     private boolean isPoint;
 
+    private boolean isEraseMode;
+
     private transient Path path = null;
     private transient Paint paint = null;
 
-    HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint) {
+    HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint, @NonNull boolean isEraseMode) {
         this.points = new ArrayList<>(points);
         this.paintColor = paint.getColor();
         this.paintAlpha = paint.getAlpha();
@@ -37,6 +39,7 @@ class HistoryPath implements Parcelable, Serializable {
         this.originX = points.get(0).x;
         this.originY = points.get(0).y;
         this.isPoint = FreeDrawHelper.isAPoint(points);
+        this.isEraseMode = isEraseMode;
 
         generatePath();
         generatePaint();
@@ -66,7 +69,7 @@ class HistoryPath implements Parcelable, Serializable {
     private void generatePaint() {
 
         paint = FreeDrawHelper.createPaintAndInitialize(paintColor, paintAlpha, paintWidth,
-                isPoint);
+                isPoint, isEraseMode);
     }
 
     public Path getPath() {
@@ -136,6 +139,14 @@ class HistoryPath implements Parcelable, Serializable {
         return paint;
     }
 
+    public boolean isEraseMode() {
+        return isEraseMode;
+    }
+
+    public void setEraseMode(boolean eraseMode) {
+        isEraseMode = eraseMode;
+    }
+
     public ArrayList<Point> getPoints() {
         return points;
     }
@@ -156,6 +167,7 @@ class HistoryPath implements Parcelable, Serializable {
         originY = in.readFloat();
 
         isPoint = in.readByte() != 0;
+        isEraseMode = in.readByte() != 0;
 
         generatePath();
         generatePaint();
@@ -178,6 +190,7 @@ class HistoryPath implements Parcelable, Serializable {
         dest.writeFloat(originY);
 
         dest.writeByte((byte) (isPoint ? 1 : 0));
+        dest.writeByte((byte) (isEraseMode ? 1 : 0));
     }
 
     // Parcelable CREATOR class
@@ -199,6 +212,7 @@ class HistoryPath implements Parcelable, Serializable {
                 "Points: " + points + "\n" +
                 "Color: " + paintColor + "\n" +
                 "Alpha: " + paintAlpha + "\n" +
-                "Width: " + paintWidth;
+                "Width: " + paintWidth + "\n" +
+                "IsEraseMode: " + isEraseMode;
     }
 }

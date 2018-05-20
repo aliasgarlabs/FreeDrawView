@@ -23,10 +23,12 @@ public class FreeDrawSerializableState implements Serializable {
     private int mLastDimensionW;
     private int mLastDimensionH;
 
+    private boolean mEraserMode;
+
     public FreeDrawSerializableState(ArrayList<HistoryPath> canceledPaths,
                                      ArrayList<HistoryPath> paths, int paintColor, int paintAlpha,
                                      float paintWidth, ResizeBehaviour resizeBehaviour,
-                                     int lastW, int lastH) {
+                                     int lastW, int lastH, boolean eraserMode) {
 
         setCanceledPaths(canceledPaths != null ? canceledPaths : new ArrayList<HistoryPath>());
         setPaths(paths != null ? paths : new ArrayList<HistoryPath>());
@@ -36,6 +38,7 @@ public class FreeDrawSerializableState implements Serializable {
         setResizeBehaviour(resizeBehaviour);
         setLastDimensionW(lastW >= 0 ? lastW : 0);
         setLastDimensionH(lastH >= 0 ? lastH : 0);
+        setEraserMode(eraserMode);
     }
 
     public ArrayList<HistoryPath> getCanceledPaths() {
@@ -100,5 +103,13 @@ public class FreeDrawSerializableState implements Serializable {
 
     public void setLastDimensionH(int lastDimensionH) {
         this.mLastDimensionH = lastDimensionH;
+    }
+
+    public boolean isEraserMode() {
+        return mEraserMode;
+    }
+
+    public void setEraserMode(boolean eraserMode) {
+        this.mEraserMode = eraserMode;
     }
 }
